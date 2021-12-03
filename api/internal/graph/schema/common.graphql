@@ -1,0 +1,25 @@
+scalar NodeID
+
+interface Node {
+    nodeID: NodeID!
+}
+
+type Comment {
+    content: String!
+    effect: ReputationEffect
+}
+
+type Photo {
+    filename: String!
+    path: String!
+    effect: ReputationEffect
+}
+
+type Game {
+    name: String!
+    genre: String!
+    hours: Float
+    effect: ReputationEffect
+}
+
+type Query

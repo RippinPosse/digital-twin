@@ -1,0 +1,10 @@
+enum Effect {
+    POSITIVE
+    NEUTRAL
+    NEGATIVE
+}
+
+type ReputationEffect {
+    effect: Effect
+    detail: String
+}

@@ -1,0 +1,13 @@
+type User {
+    nodeID: NodeID!
+
+    firstname: String!
+    lastname: String!
+    patronymic: String
+
+    sources: [Source]
+}
+
+extend type Query {
+    users(nodeID: NodeID!): User!
+}

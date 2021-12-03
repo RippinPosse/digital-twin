@@ -1,0 +1,10 @@
+enum SourceType {
+    SOCIAL_NETWORK
+    GAMES_PLATFORM
+}
+
+type Source {
+    type: SourceType!
+
+
+}

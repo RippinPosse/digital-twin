@@ -1,0 +1,13 @@
+bin
+.env
+.run
+
+vendor/
+
+/tmp/*
+
+*.pgsql
+
+.DS_Store
+.vscode
+.idea
