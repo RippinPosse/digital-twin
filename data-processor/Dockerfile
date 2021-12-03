@@ -1,16 +1,26 @@
-FROM golang:1.17-stretch AS builder
+### 1. Get Linux
+FROM continuumio/miniconda3
 
-RUN apt update && apt install git
+ARG conda_env=myenv
 
-WORKDIR /app
+ADD ./environment.yml /src/environment.yml
+RUN conda env create -f /src/environment.yml
+
+ENV PATH /opt/conda/envs/$conda_env/bin:$PATH
+ENV CONDA_DEFAULT_ENV $conda_env
+
+RUN conda init bash && \
+    . ~/.bashrc && \
+    conda activate $conda_env
+
+RUN conda install hdfs3 -c conda-forge
+
 COPY . .
 
-RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=mod -o /app/bin/processor cmd/processor/*.go
+ENV HADOOP_CONF_DIR=/etc/hadoop/conf
+COPY ./hadoop/conf $HADOOP_CONF_DIR
 
-FROM alpine
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY --from=builder /app/bin/processor /usr/bin/
-RUN chmod +x /usr/bin/processor
-
-ENTRYPOINT ["/usr/bin/processor"]
+CMD [ "python", "-u", "./main.py" ]
