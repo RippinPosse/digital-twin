@@ -6,6 +6,7 @@ import (
 	"github.com/caarlos0/env/v6"
 )
 
+// Config represents environment variables
 type Config struct {
 	Port         int `env:"PORT" envDefault:"8080"`
 	PortInternal int `env:"PORT_INTERNAL" envDefault:"8585"`

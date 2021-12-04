@@ -25,6 +25,7 @@ type tvs struct {
 	client       http.Client
 }
 
+// New wraps all required data for the interaction with Tionix Virtual Security
 func New(address, clientID, clientSecret string) Interactor {
 	c := http.Client{}
 

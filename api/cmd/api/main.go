@@ -53,6 +53,7 @@ func main() {
 
 	graphHandler := graph.New(svc, dl)
 
+	// Setup health probe routes
 	routerInternal := chi.NewRouter()
 	routerInternal.HandleFunc("/live", observability.LiveHandler)
 	routerInternal.HandleFunc("/health", observability.HealthHandler)
@@ -60,6 +61,7 @@ func main() {
 	srvInternal := server.New(routerInternal, c.PortInternal)
 	go srvInternal.Run(ctx)
 
+	// Setup graphql routes
 	routerExternal := chi.NewRouter()
 	routerExternal.Use(dl.Middleware)
 	routerExternal.Handle("/query", graphHandler)
