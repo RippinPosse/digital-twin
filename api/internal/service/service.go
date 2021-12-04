@@ -1,9 +1,34 @@
 package service
 
-type Service struct {
+import (
+	"api/internal/service/user"
+	"api/pkg/tvs"
+)
 
+type Service interface {
+	User() user.User
 }
 
-func New() *Service {
-	return &Service{}
+type SVC struct {
+	user user.User
+
+	tvs tvs.Interactor
+}
+
+func New(tvs tvs.Interactor) Service {
+	svc := &SVC{
+		tvs: tvs,
+	}
+
+	svc.user = user.New(svc)
+
+	return svc
+}
+
+func (svc *SVC) User() user.User {
+	return svc.user
+}
+
+func (svc *SVC) TVS() tvs.Interactor {
+	return svc.tvs
 }

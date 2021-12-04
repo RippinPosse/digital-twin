@@ -3,7 +3,6 @@ package dataloader
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"api/internal/hdfs"
 )
@@ -11,7 +10,7 @@ import (
 const loadersKey = "dataloaders"
 
 type Loaders struct {
-	UserLoader *UserLoader
+	//UserLoader *UserLoader
 }
 
 type Dataloader struct {
@@ -26,14 +25,14 @@ func New(hdfs *hdfs.HDFS) *Dataloader {
 
 func (d *Dataloader) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		wait := 250 * time.Microsecond
+		//wait := 250 * time.Microsecond
 
 		ctx := context.WithValue(r.Context(), loadersKey, &Loaders{
-			UserLoader: &UserLoader{
-				fetch:    FetchhUsers,
-				wait:     wait,
-				maxBatch: 100,
-			},
+			//UserLoader: &UserLoader{
+			//	fetch:    FetchhUsers,
+			//	wait:     wait,
+			//	maxBatch: 100,
+			//},
 		})
 
 		r = r.WithContext(ctx)
@@ -44,4 +43,3 @@ func (d *Dataloader) Middleware(next http.Handler) http.Handler {
 func (d *Dataloader) For(ctx context.Context) *Loaders {
 	return ctx.Value(loadersKey).(*Loaders)
 }
-

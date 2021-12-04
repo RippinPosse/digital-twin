@@ -3,12 +3,10 @@ package tvs
 import "errors"
 
 type GrantRequest struct {
-	ClientID     string    `json:"client_id"`
-	ClientSecret string    `json:"client_secret"`
-	GrantType    GrantType `json:"grant_type"`
-	Username     string    `json:"username"`
-	Password     string    `json:"password,omitempty"`
-	Scope        string    `json:"scope"`
+	GrantType GrantType `json:"grant_type"`
+	Username  string    `json:"username"`
+	Password  string    `json:"password,omitempty"`
+	Scope     string    `json:"scope"`
 
 	// Required only for authorization_code grant type
 	RedirectURL string `json:"redirect_url"`

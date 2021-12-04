@@ -1,9 +1,3 @@
-scalar NodeID
-
-interface Node {
-    nodeID: NodeID!
-}
-
 type Comment {
     content: String!
     effect: ReputationEffect
@@ -22,4 +16,10 @@ type Game {
     effect: ReputationEffect
 }
 
+interface MutationResult {
+    success: Boolean!
+    message: String!
+}
+
+type Mutation
 type Query

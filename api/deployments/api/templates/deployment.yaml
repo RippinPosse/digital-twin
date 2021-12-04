@@ -49,6 +49,21 @@ spec:
                 secretKeyRef:
                   key: hdfs_port
                   name: {{ .Release.Name }}-secret
+            - name: "TVS_ADDRESS"
+              valueFrom:
+                secretKeyRef:
+                  key: tvs_address
+                  name: {{ .Release.Name }}-secret
+            - name: "TVS_CLIENT_ID"
+              valueFrom:
+                secretKeyRef:
+                  key: tvs_client_id
+                  name: {{ .Release.Name }}-secret
+            - name: "TVS_CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: tvs_client_secret
+                  name: {{ .Release.Name }}-secret
           ports:
             - name: external
               containerPort: 8080

@@ -1,10 +1,13 @@
 package tvs
 
 import (
-	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 type Interactor interface {
@@ -16,16 +19,20 @@ const (
 )
 
 type tvs struct {
-	address string
-	client  http.Client
+	address      string
+	clientID     string
+	clientSecret string
+	client       http.Client
 }
 
-func New(address string) Interactor {
+func New(address, clientID, clientSecret string) Interactor {
 	c := http.Client{}
 
 	tvs := &tvs{
-		address: address,
-		client:  c,
+		address:      address,
+		clientID:     clientID,
+		clientSecret: clientSecret,
+		client:       c,
 	}
 
 	return tvs
@@ -40,21 +47,36 @@ func (tvs *tvs) AuthorizeByPassword(req *GrantRequest) (string, error) {
 		return "", fmt.Errorf("invalid request: %w", err)
 	}
 
-	body, err := json.Marshal(req)
+	data := url.Values{}
+	data.Set("client_id", tvs.clientID)
+	data.Set("client_secret", tvs.clientSecret)
+	data.Set("grant_type", string(req.GrantType))
+	data.Set("username", req.Username)
+	data.Set("password", req.Password)
+	data.Set("scope", req.Scope)
+	encodedData := data.Encode()
+
+	r, err := http.NewRequest("POST", tvs.address+passwordGrantEndpoint, strings.NewReader(encodedData))
 	if err != nil {
-		return "", fmt.Errorf("marshal request: %w", err)
+		return "", fmt.Errorf("new request %w", err)
+	}
+	r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	r.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	resp, err := tvs.client.Do(r)
+	if err != nil {
+		return "", fmt.Errorf("do request %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return "", errors.New(resp.Status)
 	}
 
-	buf := bytes.NewBuffer(body)
-	r, err := tvs.client.Post(tvs.address + passwordGrantEndpoint, "application/json", buf)
-	if err != nil {
-		return "", fmt.Errorf("send request: %w", err)
-	}
-
-	resp := &AuthResponse{}
-	if err := json.NewDecoder(r.Body).Decode(resp); err != nil {
+	authResp := &AuthResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(authResp); err != nil {
 		return "", fmt.Errorf("decode response: %w", err)
 	}
 
-	return resp.AccessToken, nil
+	return authResp.AccessToken, nil
 }

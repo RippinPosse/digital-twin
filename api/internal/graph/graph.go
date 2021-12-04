@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"github.com/99designs/gqlgen/graphql/playground"
 	"net/http"
 
 	"api/internal/graph/dataloader"
@@ -9,14 +8,15 @@ import (
 	"api/internal/graph/resolver"
 	"api/internal/service"
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 )
 
 //go:generate go run github.com/99designs/gqlgen generate ./gqlgen.yml
 //go:generate gofumpt -w ./resolver
 
-func New(service *service.Service, dataloader *dataloader.Dataloader) http.Handler {
+func New(service service.Service, dataloader *dataloader.Dataloader) http.Handler {
 	c := generated.Config{
-		Resolvers:  resolver.New(service, dataloader),
+		Resolvers: resolver.New(service, dataloader),
 	}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))

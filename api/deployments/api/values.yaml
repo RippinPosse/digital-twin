@@ -8,7 +8,7 @@ image:
   repository: lod2021rp/api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 1.0.3
 
 imagePullSecrets: []
 nameOverride: ""
@@ -72,3 +72,6 @@ affinity: {}
 port:
 hdfs_host:
 hdfs_port:
+tvs_address:
+tvs_client_id:
+tvs_client_secret:

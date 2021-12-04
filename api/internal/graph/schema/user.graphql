@@ -1,13 +1,28 @@
 type User {
-    nodeID: NodeID!
+    id: ID!
 
     firstname: String!
     lastname: String!
     patronymic: String
 
-    sources: [Source]
+#    sources: [Source]
 }
 
 extend type Query {
-    users(nodeID: NodeID!): User!
+    users(id: ID!): User!
+}
+
+input AuthorizeUserInput {
+    username: String!
+    password: String!
+}
+
+type AuthorizeUserResult implements MutationResult {
+    success: Boolean!
+    message: String!
+    accessToken: String!
+}
+
+extend type Mutation {
+    authorize(input: AuthorizeUserInput!): AuthorizeUserResult!
 }

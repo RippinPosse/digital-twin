@@ -10,11 +10,11 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	service    *service.Service
+	service    service.Service
 	dataloader *dataloader.Dataloader
 }
 
-func New(service *service.Service, dataloader *dataloader.Dataloader) *Resolver {
+func New(service service.Service, dataloader *dataloader.Dataloader) *Resolver {
 	return &Resolver{
 		service:    service,
 		dataloader: dataloader,

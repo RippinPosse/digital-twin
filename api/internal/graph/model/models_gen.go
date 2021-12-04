@@ -8,9 +8,22 @@ import (
 	"strconv"
 )
 
-type Node interface {
-	IsNode()
+type MutationResult interface {
+	IsMutationResult()
 }
+
+type AuthorizeUserInput struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type AuthorizeUserResult struct {
+	Success     bool   `json:"success"`
+	Message     string `json:"message"`
+	AccessToken string `json:"accessToken"`
+}
+
+func (AuthorizeUserResult) IsMutationResult() {}
 
 type Comment struct {
 	Content string            `json:"content"`
@@ -37,14 +50,6 @@ type ReputationEffect struct {
 
 type Source struct {
 	Type SourceType `json:"type"`
-}
-
-type User struct {
-	NodeID     string    `json:"nodeID"`
-	Firstname  string    `json:"firstname"`
-	Lastname   string    `json:"lastname"`
-	Patronymic *string   `json:"patronymic"`
-	Sources    []*Source `json:"sources"`
 }
 
 type Effect string

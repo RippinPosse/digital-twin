@@ -13,6 +13,7 @@ import (
 	"api/internal/observability"
 	"api/internal/server"
 	"api/internal/service"
+	"api/pkg/tvs"
 	"github.com/go-chi/chi"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
@@ -46,18 +47,9 @@ func main() {
 		return
 	}
 
-	//hdfsClient, err := hdfs.New(c.HDFS.Host, c.HDFS.Port)
-	//if err != nil {
-	//	err = fmt.Errorf("create hdfs client: %w", err)
-	//	logger.Error(err.Error())
-	//
-	//	return
-	//}
-
-	svc := service.New()
-	//dl := dataloader.New(hdfsClient)
+	tvsInteractor := tvs.New(c.TVS.Address, c.TVS.ClientID, c.TVS.ClientSecret)
+	svc := service.New(tvsInteractor)
 	dl := dataloader.New(&hdfs.HDFS{})
-
 
 	graphHandler := graph.New(svc, dl)
 

@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+
 	"github.com/caarlos0/env/v6"
 )
 
@@ -12,6 +13,12 @@ type Config struct {
 	HDFS struct {
 		Host string `env:"HDFS_HOST"`
 		Port int    `env:"HDFS_PORT"`
+	}
+
+	TVS struct {
+		Address      string `env:"TVS_ADDRESS"`
+		ClientID     string `env:"TVS_CLIENT_ID"`
+		ClientSecret string `env:"TVS_CLIENT_SECRET"`
 	}
 }
 
